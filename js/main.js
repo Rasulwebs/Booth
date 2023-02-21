@@ -358,6 +358,133 @@
 
     }; // end ssMailChimpForm
 
+   /* video Lightbox
+    * ------------------------------------------------------ */
+   const ssVideoLightbox = function() {
+
+    const videoLink = document.querySelector('.s-intro__content-video-btn');
+    if (!videoLink) return;
+
+    videoLink.addEventListener('click', function(event) {
+
+        const vLink = this.getAttribute('href');
+        const iframe = "<iframe src='" + vLink + "' frameborder='0'></iframe>";
+
+        event.preventDefault();
+
+        const instance = basicLightbox.create(iframe);
+        instance.show()
+
+    });
+
+}; // end ssVideoLightbox
+
+
+/* alert boxes
+* ------------------------------------------------------ */
+const ssAlertBoxes = function() {
+
+    const boxes = document.querySelectorAll('.alert-box');
+
+    boxes.forEach(function(box){
+
+        box.addEventListener('click', function(event) {
+            if (event.target.matches('.alert-box__close')) {
+                event.stopPropagation();
+                event.target.parentElement.classList.add('hideit');
+
+                setTimeout(function(){
+                    box.style.display = 'none';
+                }, 500)
+            }
+        });
+    })
+
+}; // end ssAlertBoxes
+
+
+/* Back to Top
+* ------------------------------------------------------ */
+const ssBackToTop = function() {
+
+    const pxShow = 900;
+    const goTopButton = document.querySelector(".ss-go-top");
+
+    if (!goTopButton) return;
+
+    // Show or hide the button
+    if (window.scrollY >= pxShow) goTopButton.classList.add("link-is-visible");
+
+    window.addEventListener('scroll', function() {
+        if (window.scrollY >= pxShow) {
+            if(!goTopButton.classList.contains('link-is-visible')) goTopButton.classList.add("link-is-visible")
+        } else {
+            goTopButton.classList.remove("link-is-visible")
+        }
+    });
+
+}; // end ssBackToTop
+
+
+/* smoothscroll
+* ------------------------------------------------------ */
+const ssMoveTo = function(){
+
+    const easeFunctions = {
+        easeInQuad: function (t, b, c, d) {
+            t /= d;
+            return c * t * t + b;
+        },
+        easeOutQuad: function (t, b, c, d) {
+            t /= d;
+            return -c * t* (t - 2) + b;
+        },
+        easeInOutQuad: function (t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t + b;
+            t--;
+            return -c/2 * (t*(t-2) - 1) + b;
+        },
+        easeInOutCubic: function (t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t*t + b;
+            t -= 2;
+            return c/2*(t*t*t + 2) + b;
+        }
+    }
+
+    const triggers = document.querySelectorAll('.smoothscroll');
+    
+    const moveTo = new MoveTo({
+        tolerance: 0,
+        duration: 1200,
+        easing: 'easeInOutCubic',
+        container: window
+    }, easeFunctions);
+
+    triggers.forEach(function(trigger) {
+        moveTo.registerTrigger(trigger);
+    });
+
+}; // end ssMoveTo
+
+
+/* Initialize
+* ------------------------------------------------------ */
+(function ssInit() {
+
+    ssPreloader();
+    ssMoveHeader();
+    ssMobileMenu();
+    ssScrollSpy();
+    ssSwiper();
+    ssMailChimpForm();
+    ssVideoLightbox();
+    ssAlertBoxes();
+    ssBackToTop();
+    ssMoveTo();
+
+})();
 
 
 })(document.documentElement);
